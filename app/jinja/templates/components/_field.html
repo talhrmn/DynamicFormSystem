@@ -1,0 +1,79 @@
+<div class="form-group">
+    <label for="field_{{ field.name }}" class="form-label">
+        {{ field.label }}
+        {% if field.required %}
+        <span class="required-indicator">*</span>
+        {% endif %}
+    </label>
+
+    {% if field.type == 'dropdown' %}
+    <select
+            id="field_{{ field.name }}"
+            name="{{ field.name }}"
+            class="form-select {% if field.error %}is-invalid{% endif %}"
+            {% if field.required %}required{% endif %}
+            {{ field.get_attributes_string() | safe }}
+    >
+        <option value="">Select {{ field.label }}</option>
+        {% for option in field.options %}
+        <option value="{{ option }}" {% if field.value== option %}selected{% endif %}>
+            {{ option }}
+        </option>
+        {% endfor %}
+    </select>
+
+    {% elif field.type in ['text', 'textarea'] %}
+    <textarea
+            id="field_{{ field.name }}"
+            name="{{ field.name }}"
+            rows="{{ field.rows or 4 }}"
+            class="form-control {% if field.error %}is-invalid{% endif %}"
+            placeholder="{{ field.placeholder or ('Enter ' ~ field.label|lower) }}"
+            {% if field.required %}required{% endif %}
+            {{ field.get_attributes_string() | safe }}
+    >{{ field.value or '' }}</textarea>
+
+    {% else %}
+    <input
+            type="{{ field.html_type }}"
+            id="field_{{ field.name }}"
+            name="{{ field.name }}"
+            value="{{ field.value or '' }}"
+            class="form-control {% if field.error %}is-invalid{% endif %}"
+            placeholder="{{ field.placeholder or ('Enter ' ~ field.label|lower) }}"
+            {% if field.required %}required{% endif %}
+            {% if field.min_value is not none %}min="{{ field.min_value }}" {% endif %}
+            {% if field.max_value is not none %}max="{{ field.max_value }}" {% endif %}
+            {% if field.step is not none %}step="{{ field.step }}" {% endif %}
+            {{ field.get_attributes_string() | safe }}
+    >
+    {% endif %}
+
+    {% if field.error %}
+    <div class="invalid-feedback">{{ field.error }}</div>
+    {% endif %}
+
+    {% if field.min_length or field.max_length %}
+    <small class="field-helper-text">
+        {% if field.min_length and field.max_length %}
+        {{ field.min_length }}-{{ field.max_length }} characters
+        {% elif field.min_length %}
+        Minimum {{ field.min_length }} characters
+        {% elif field.max_length %}
+        Maximum {{ field.max_length }} characters
+        {% endif %}
+    </small>
+    {% endif %}
+
+    {% if field.min_value is not none or field.max_value is not none %}
+    <small class="field-helper-text">
+        {% if field.min_value is not none and field.max_value is not none %}
+        Range: {{ field.min_value }} - {{ field.max_value }}
+        {% elif field.min_value is not none %}
+        Minimum: {{ field.min_value }}
+        {% elif field.max_value is not none %}
+        Maximum: {{ field.max_value }}
+        {% endif %}
+    </small>
+    {% endif %}
+</div>

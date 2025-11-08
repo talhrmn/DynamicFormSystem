@@ -1,0 +1,225 @@
+<div class="filters-section mb-4">
+    <button class="btn btn-secondary" id="toggleFilters" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+        </svg>
+        <span>Filters</span>
+        <span class="active-filters-count" id="activeFiltersCount" style="display: none;">0</span>
+    </button>
+</div>
+
+<!-- Filter Overlay -->
+<div class="filter-overlay" id="filterOverlay"></div>
+
+<!-- Filter Panel -->
+<div class="filters-panel" id="filtersPanel">
+    <div class="filters-panel-header">
+        <h3>Filter Submissions</h3>
+        <button class="filters-panel-close" id="closeFilters" type="button" aria-label="Close filters">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="filters-panel-body">
+        <form method="get" id="filtersForm">
+            <!-- Preserve sorting and pagination -->
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="page_size" value="{{ page_size }}">
+            <input type="hidden" name="sort_by" value="{{ sort_by }}">
+            <input type="hidden" name="sort_desc" value="{{ sort_desc }}">
+
+            {% for col in columns %}
+            <div class="filter-group">
+                <label class="filter-group-label">{{ col.name.replace('_', ' ') | title }}</label>
+
+                {% if col.type in ['string', 'email', 'password'] %}
+                <select name="{{ col.name }}__op" class="form-select form-select-sm mb-2">
+                    {% for op in filter_options[col.name] %}
+                    <option value="{{ op }}"
+                            {% if filters_applied.get(col.name) and filters_applied[col.name][0].operator== op
+                            %}selected{% endif %}>
+                        {{ op.replace('_', ' ') | title }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <input type="text"
+                       name="{{ col.name }}__value"
+                       class="form-control form-control-sm"
+                       placeholder="Enter value"
+                       value="{% if filters_applied.get(col.name) %}{{ filters_applied[col.name][0].raw_value }}{% endif %}">
+
+                {% elif col.type == 'number' %}
+                <select name="{{ col.name }}__op" class="form-select form-select-sm mb-2">
+                    {% set ops = ['eq', 'gte', 'lte', 'gt', 'lt'] %}
+                    {% for op in ops %}
+                    <option value="{{ op }}"
+                            {% if filters_applied.get(col.name) and filters_applied[col.name][0].operator== op
+                            %}selected{% endif %}>
+                        {% if op == 'eq' %}Equals
+                        {% elif op == 'gte' %}≥ Greater or Equal
+                        {% elif op == 'lte' %}≤ Less or Equal
+                        {% elif op == 'gt' %}> Greater Than
+                        {% else %}< Less Than
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+                <input type="number"
+                       name="{{ col.name }}__value"
+                       class="form-control form-control-sm"
+                       placeholder="Enter number"
+                       value="{% if filters_applied.get(col.name) %}{{ filters_applied[col.name][0].raw_value }}{% endif %}">
+
+                {% elif col.type == 'boolean' %}
+                <select name="{{ col.name }}__value" class="form-select form-select-sm">
+                    <option value="">Any</option>
+                    <option value="true" {% if filters_applied.get(col.name) and
+                            filters_applied[col.name][0].raw_value==
+                    'true' %}selected{% endif %}>True</option>
+                    <option value="false" {% if filters_applied.get(col.name) and
+                            filters_applied[col.name][0].raw_value==
+                    'false' %}selected{% endif %}>False</option>
+                </select>
+
+                {% elif col.type == 'date' %}
+                <label class="form-label"
+                       style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--color-text-muted);">From</label>
+                <input type="date"
+                       name="{{ col.name }}__from"
+                       class="form-control form-control-sm mb-2"
+                       value="{% if filters_applied.get(col.name) %}{{ (filters_applied[col.name]|selectattr('operator','equalto','from')|list|first).raw_value if (filters_applied[col.name]|selectattr('operator','equalto','from')|list) else '' }}{% endif %}">
+
+                <label class="form-label"
+                       style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--color-text-muted);">To</label>
+                <input type="date"
+                       name="{{ col.name }}__to"
+                       class="form-control form-control-sm"
+                       value="{% if filters_applied.get(col.name) %}{{ (filters_applied[col.name]|selectattr('operator','equalto','to')|list|first).raw_value if (filters_applied[col.name]|selectattr('operator','equalto','to')|list) else '' }}{% endif %}">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+
+    <div class="filters-panel-footer">
+        <div class="btn-group" style="width: 100%;">
+            <button type="submit" form="filtersForm" class="btn btn-primary" style="flex: 1;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Apply Filters
+            </button>
+            <a href="?page=1&page_size={{ page_size }}&sort_by={{ sort_by }}&sort_desc={{ sort_desc }}"
+               class="btn btn-secondary" style="flex: 1;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Clear All
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('toggleFilters');
+        const closeBtn = document.getElementById('closeFilters');
+        const overlay = document.getElementById('filterOverlay');
+        const panel = document.getElementById('filtersPanel');
+        const form = document.getElementById('filtersForm');
+        const activeCountBadge = document.getElementById('activeFiltersCount');
+
+        // Count active filters
+        function countActiveFilters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let count = 0;
+
+            urlParams.forEach((value, key) => {
+                if (key.includes('__') && value &&
+                    !key.includes('sort') &&
+                    key !== 'page' &&
+                    key !== 'page_size') {
+                    count++;
+                }
+            });
+
+            return count;
+        }
+
+        // Update badge display
+        function updateFilterBadge() {
+            const count = countActiveFilters();
+
+            if (count > 0) {
+                activeCountBadge.textContent = count;
+                activeCountBadge.style.display = 'inline-flex';
+                toggleBtn.classList.add('has-active-filters');
+            } else {
+                activeCountBadge.style.display = 'none';
+                toggleBtn.classList.remove('has-active-filters');
+            }
+        }
+
+        // Open panel
+        function openPanel() {
+            panel.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close panel
+        function closePanel() {
+            panel.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners
+        toggleBtn.addEventListener('click', openPanel);
+        closeBtn.addEventListener('click', closePanel);
+        overlay.addEventListener('click', closePanel);
+
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && panel.classList.contains('active')) {
+                closePanel();
+            }
+        });
+
+        // Form submission cleanup
+        form.addEventListener('submit', (e) => {
+            const inputs = form.querySelectorAll('input, select');
+
+            inputs.forEach(input => {
+                // Keep hidden fields
+                if (input.type === 'hidden') return;
+
+                const isOperator = input.name.endsWith('__op');
+                const baseName = input.name.replace(/__op|__value|__from|__to$/, '');
+                const valueInput = form.querySelector(`[name="${baseName}__value"]`);
+
+                // Disable operator if value is empty
+                if (isOperator && valueInput && !valueInput.value) {
+                    input.disabled = true;
+                }
+
+                // Disable value input if empty
+                if (input.name.endsWith('__value') && !input.value) {
+                    input.disabled = true;
+                }
+
+                // Disable date fields if empty
+                if ((input.name.endsWith('__from') || input.name.endsWith('__to')) && !input.value) {
+                    input.disabled = true;
+                }
+            });
+        });
+
+        // Initialize badge on page load
+        updateFilterBadge();
+    });
+</script>

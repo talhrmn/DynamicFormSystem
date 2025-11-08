@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 
 from app.common.logger import setup_logging, get_logger
 from app.core.config import get_settings
@@ -70,6 +72,15 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "jinja/static"
+
+if STATIC_DIR.exists():
+    app.mount("/jinja/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+    logger.info("Static files mounted", path=str(STATIC_DIR))
+else:
+    logger.warning("Static directory not found", path=str(STATIC_DIR))
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
@@ -112,3 +123,18 @@ if __name__ == "__main__":
         reload=settings.DEBUG,
         log_level=settings.LOG_LEVEL.lower(),
     )
+
+"""
+                <a href="{{ url_for('submissions_form') }}" class="nav-link">Submissions</a>
+
+"""
+
+"""
+<!--                    <a href="{{ url_for('submissions_form') }}" class="btn btn-secondary">-->
+<!--                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">-->
+<!--                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>-->
+<!--                            <polyline points="14 2 14 8 20 8"/>-->
+<!--                        </svg>-->
+<!--                        View All Submissions-->
+<!--                    </a>-->
+"""
