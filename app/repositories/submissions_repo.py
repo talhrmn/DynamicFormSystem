@@ -73,3 +73,46 @@ class SubmissionsRepo(BaseRepo):
 
             result = await self.session.execute(query)
             return int(result.scalar() or 0)
+
+    async def get_duplicates(self, key_fields: list[str]) -> List[Any]:
+        """
+        Find submissions that are duplicates based on key fields.
+        """
+        async with self.transaction():
+            cols = [getattr(self.table_model, f) for f in key_fields]
+            query = (
+                select(*cols, func.count().label("cnt"))
+                .group_by(*cols)
+                .having(func.count() > 1)
+            )
+            results = await self.session.execute(query)
+            return results.all()
+
+    async def get_field_non_null_count(self, column_name: str) -> int:
+        """
+        Find non-null count by field.
+        """
+        col = getattr(self.table_model, column_name)
+        async with self.transaction():
+            query = select(func.count()).where(col.is_not(None))
+            result = await self.session.execute(query)
+            return int(result.scalar() or 0)
+
+    async def get_field_unique_count(self, column_name: str) -> int:
+        """
+        Find unique count by field.
+        """
+        col = getattr(self.table_model, column_name)
+        async with self.transaction():
+            stmt = select(func.count(func.distinct(col)))
+            result = await self.session.execute(stmt)
+            return int(result.scalar() or 0)
+
+    async def get_all_field_stats(self) -> dict[str, dict[str, int]]:
+        stats = {}
+        for col in self.table_model.__table__.columns:
+            name = col.name
+            non_null = await self.get_field_non_null_count(name)
+            unique = await self.get_field_unique_count(name)
+            stats[name] = {"non_null": non_null, "unique": unique}
+        return stats
