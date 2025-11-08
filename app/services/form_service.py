@@ -7,6 +7,7 @@ from app.common.logger import get_logger
 from app.common.schemas import FormSchema
 from app.core.config import get_settings
 from app.core.system import get_system_manager
+from app.jinja.consts import FORM_ACTION_PATH, FORM_TITLE
 from app.jinja.form_renderer import FormRenderer
 from app.repositories.submissions_repo import SubmissionsRepo
 
@@ -30,8 +31,8 @@ class FormService:
             form_schema: FormSchema,
             values: Optional[Dict[str, Any]] = None,
             errors: Optional[Dict[str, str]] = None,
-            form_title: str = "Dynamic Form Submission",
-            form_action: str = "/api/v1/forms/submit",
+            form_title: str = FORM_TITLE,
+            form_action: str = FORM_ACTION_PATH,
             success_message: Optional[str] = None,
     ):
         """

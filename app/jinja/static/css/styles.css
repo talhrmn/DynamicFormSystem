@@ -1,8 +1,4 @@
-/* ============================================================================
-   CSS Custom Properties
-   ============================================================================ */
 :root {
-    /* Colors - Modern Dark Matte Palette */
     --color-primary: #6366f1;
     --color-primary-hover: #4f46e5;
     --color-primary-light: #eef2ff;
@@ -17,7 +13,6 @@
     --color-warning: #d97706;
     --color-warning-light: #fef3c7;
 
-    /* Neutral Colors - Darker, Matte */
     --color-bg: #f8f9fa;
     --color-surface: #ffffff;
     --color-surface-dark: #1e293b;
@@ -26,20 +21,17 @@
     --color-text-muted: #64748b;
     --color-text-light: #94a3b8;
 
-    /* Shadows - Softer, more subtle */
     --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.04);
     --shadow: 0 1px 3px 0 rgb(15 23 42 / 0.08), 0 1px 2px -1px rgb(15 23 42 / 0.06);
     --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
     --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.08);
     --shadow-xl: 0 20px 25px -5px rgb(15 23 42 / 0.1), 0 8px 10px -6px rgb(15 23 42 / 0.08);
 
-    /* Border Radius */
     --radius-sm: 6px;
     --radius: 8px;
     --radius-lg: 12px;
     --radius-xl: 16px;
 
-    /* Spacing */
     --space-xs: 0.5rem;
     --space-sm: 0.75rem;
     --space: 1rem;
@@ -47,19 +39,14 @@
     --space-xl: 2rem;
     --space-2xl: 3rem;
 
-    /* Typography */
     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
     --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 
-    /* Transitions */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ============================================================================
-   Base Styles
-   ============================================================================ */
 * {
     margin: 0;
     padding: 0;
@@ -78,9 +65,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ============================================================================
-   Navigation
-   ============================================================================ */
 .navbar {
     background: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
@@ -153,17 +137,11 @@ body {
     transform: scaleX(1);
 }
 
-/* ============================================================================
-   Main Content
-   ============================================================================ */
 .main-content {
     flex: 1;
     padding: var(--space-2xl) 0;
 }
 
-/* ============================================================================
-   Cards & Containers
-   ============================================================================ */
 .card {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
@@ -195,9 +173,6 @@ body {
     padding: var(--space-xl);
 }
 
-/* ============================================================================
-   Forms
-   ============================================================================ */
 .form-group {
     margin-bottom: var(--space-lg);
 }
@@ -279,9 +254,6 @@ body {
     margin-bottom: var(--space-lg);
 }
 
-/* ============================================================================
-   Buttons
-   ============================================================================ */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -332,14 +304,10 @@ body {
     flex-wrap: wrap;
 }
 
-/* ============================================================================
-   Slide-in Filter Panel
-   ============================================================================ */
 .filters-section {
     margin-bottom: var(--space-lg);
 }
 
-/* Filter Toggle Button */
 .filters-section .btn {
     position: relative;
 }
@@ -356,7 +324,6 @@ body {
     border-radius: 50%;
 }
 
-/* Filter Overlay */
 .filter-overlay {
     position: fixed;
     top: 0;
@@ -376,7 +343,6 @@ body {
     visibility: visible;
 }
 
-/* Filter Panel */
 .filters-panel {
     position: fixed;
     top: 0;
@@ -398,7 +364,6 @@ body {
     transform: translateX(0);
 }
 
-/* Filter Panel Header */
 .filters-panel-header {
     display: flex;
     align-items: center;
@@ -433,21 +398,18 @@ body {
     color: var(--color-text);
 }
 
-/* Filter Panel Body */
 .filters-panel-body {
     flex: 1;
     overflow-y: auto;
     padding: var(--space-lg);
 }
 
-/* Filter Panel Footer */
 .filters-panel-footer {
     padding: var(--space-lg);
     border-top: 1px solid var(--color-border);
     background: var(--color-bg);
 }
 
-/* Filter Groups */
 .filter-group {
     margin-bottom: var(--space-lg);
 }
@@ -469,7 +431,6 @@ body {
     border-radius: var(--radius-sm);
 }
 
-/* Active Filter Badge */
 .active-filters-count {
     display: inline-flex;
     align-items: center;
@@ -485,9 +446,6 @@ body {
     margin-left: var(--space-xs);
 }
 
-/* ============================================================================
-   Alerts
-   ============================================================================ */
 .alert {
     padding: var(--space);
     border-radius: var(--radius);
@@ -521,9 +479,6 @@ body {
     color: var(--color-primary-dark);
 }
 
-/* ============================================================================
-   Tables
-   ============================================================================ */
 .table-container {
     overflow-x: auto;
     border-radius: var(--radius);
@@ -576,9 +531,6 @@ body {
     color: var(--color-primary);
 }
 
-/* ============================================================================
-   Badges
-   ============================================================================ */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -609,9 +561,6 @@ body {
     color: var(--color-text-muted);
 }
 
-/* ============================================================================
-   Success Card
-   ============================================================================ */
 .success-card {
     background: linear-gradient(135deg, var(--color-success-light) 0%, #a7f3d0 100%);
     border-radius: var(--radius-lg);
@@ -634,9 +583,6 @@ body {
     font-weight: bold;
 }
 
-/* ============================================================================
-   Pagination
-   ============================================================================ */
 .pagination {
     display: flex;
     justify-content: center;
@@ -679,18 +625,12 @@ body {
     color: white;
 }
 
-/* ============================================================================
-   Loading States
-   ============================================================================ */
 .spinner-border-sm {
     width: 1rem;
     height: 1rem;
     border-width: 0.15em;
 }
 
-/* ============================================================================
-   Footer
-   ============================================================================ */
 .footer {
     background: var(--color-surface);
     border-top: 1px solid var(--color-border);
@@ -705,9 +645,6 @@ body {
     font-size: 0.875rem;
 }
 
-/* ============================================================================
-   Responsive Design
-   ============================================================================ */
 @media (max-width: 768px) {
     .nav-links {
         gap: var(--space);
@@ -739,9 +676,6 @@ body {
     }
 }
 
-/* ============================================================================
-   Accessibility
-   ============================================================================ */
 :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
@@ -761,9 +695,6 @@ body {
     }
 }
 
-/* ============================================================================
-   Utility Classes
-   ============================================================================ */
 .text-muted {
     color: var(--color-text-muted) !important;
 }

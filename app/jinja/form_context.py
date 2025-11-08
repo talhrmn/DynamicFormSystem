@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict
 
+from app.jinja.consts import FORM_ACTION_PATH, FORM_TITLE
 from app.jinja.form_field import FormField
 
 
@@ -13,8 +14,8 @@ class FormContext:
     def __init__(
             self,
             fields: List[FormField],
-            form_title: str = "Submit Form",
-            form_action: str = "/api/v1/forms/submit",
+            form_title: str = FORM_TITLE,
+            form_action: str = FORM_ACTION_PATH,
             form_method: str = "POST",
             submit_text: str = "Submit",
             errors: Optional[Dict[str, str]] = None,

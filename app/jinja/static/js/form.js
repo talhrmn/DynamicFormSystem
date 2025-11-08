@@ -1,12 +1,6 @@
-/**
- * Modern Form Enhancement
- * Provides real-time validation and better UX
- */
-
 (function() {
     'use strict';
 
-    // Configuration
     const CONFIG = {
         validateOnBlur: true,
         validateOnChange: false,
@@ -14,7 +8,6 @@
         debounceDelay: 300
     };
 
-    // Utility: Debounce
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -23,7 +16,6 @@
         };
     }
 
-    // Validate single field
     function validateField(field) {
         const isValid = field.checkValidity();
 
@@ -49,7 +41,6 @@
         }
     }
 
-    // Validate entire form
     function validateForm(form) {
         let isValid = true;
         const fields = form.querySelectorAll('input, select, textarea');
@@ -63,7 +54,6 @@
         return isValid;
     }
 
-    // Show alert message
     function showAlert(message, type = 'danger') {
         const alert = document.createElement('div');
         alert.className = `alert alert-${type}`;
@@ -83,7 +73,6 @@
         }
     }
 
-    // Handle form submission
     function handleFormSubmit(form) {
         form.addEventListener('submit', function(e) {
             if (!validateForm(form)) {
@@ -115,7 +104,6 @@
         });
     }
 
-    // Enhance number fields
     function enhanceNumberField(field) {
         const min = parseFloat(field.getAttribute('min'));
         const max = parseFloat(field.getAttribute('max'));
@@ -129,7 +117,6 @@
         });
     }
 
-    // Enhance email field
     function enhanceEmailField(field) {
         field.addEventListener('input', debounce(function() {
             const value = this.value.trim();
@@ -141,7 +128,6 @@
         }, CONFIG.debounceDelay));
     }
 
-    // Enhance password field with toggle
     function enhancePasswordField(field) {
         const wrapper = field.parentElement;
         const toggle = document.createElement('button');
@@ -178,7 +164,6 @@
         wrapper.appendChild(toggle);
     }
 
-    // Add character counter
     function addCharacterCounter(field) {
         const maxLength = field.getAttribute('maxlength');
         if (!maxLength) return;
@@ -198,10 +183,8 @@
         updateCounter();
     }
 
-    // Keyboard shortcuts
     function addKeyboardShortcuts(form) {
         document.addEventListener('keydown', function(e) {
-            // Ctrl/Cmd + Enter to submit
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 e.preventDefault();
                 form.requestSubmit();
@@ -209,7 +192,6 @@
         });
     }
 
-    // Initialize form
     function initializeForm() {
         const form = document.querySelector('form');
         if (!form) return;
@@ -219,7 +201,6 @@
         const fields = form.querySelectorAll('input:not([type="submit"]):not([type="reset"]), select, textarea');
 
         fields.forEach(field => {
-            // Validation on blur
             if (CONFIG.validateOnBlur) {
                 field.addEventListener('blur', function() {
                     if (this.value.trim() !== '') {
@@ -228,7 +209,6 @@
                 });
             }
 
-            // Validation on change
             if (CONFIG.validateOnChange) {
                 field.addEventListener('input', debounce(function() {
                     if (this.value.trim() !== '') {
@@ -237,7 +217,6 @@
                 }, CONFIG.debounceDelay));
             }
 
-            // Type-specific enhancements
             if (field.type === 'number') {
                 enhanceNumberField(field);
             } else if (field.type === 'email') {
@@ -246,7 +225,6 @@
                 enhancePasswordField(field);
             }
 
-            // Character counter
             if ((field.tagName === 'INPUT' || field.tagName === 'TEXTAREA') && field.getAttribute('maxlength')) {
                 addCharacterCounter(field);
             }
@@ -255,7 +233,6 @@
         handleFormSubmit(form);
         addKeyboardShortcuts(form);
 
-        // Reset button confirmation
         const resetBtn = form.querySelector('button[type="reset"]');
         if (resetBtn) {
             resetBtn.addEventListener('click', function(e) {
@@ -265,10 +242,9 @@
             });
         }
 
-        console.log('✅ Form enhancements initialized');
+        console.log('Form enhancements initialized');
     }
 
-    // Auto-initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeForm);
     } else {
