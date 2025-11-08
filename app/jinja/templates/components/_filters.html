@@ -8,10 +8,8 @@
     </button>
 </div>
 
-<!-- Filter Overlay -->
 <div class="filter-overlay" id="filterOverlay"></div>
 
-<!-- Filter Panel -->
 <div class="filters-panel" id="filtersPanel">
     <div class="filters-panel-header">
         <h3>Filter Submissions</h3>
@@ -25,7 +23,6 @@
 
     <div class="filters-panel-body">
         <form method="get" id="filtersForm">
-            <!-- Preserve sorting and pagination -->
             <input type="hidden" name="page" value="1">
             <input type="hidden" name="page_size" value="{{ page_size }}">
             <input type="hidden" name="sort_by" value="{{ sort_by }}">
@@ -133,7 +130,6 @@
         const form = document.getElementById('filtersForm');
         const activeCountBadge = document.getElementById('activeFiltersCount');
 
-        // Count active filters
         function countActiveFilters() {
             const urlParams = new URLSearchParams(window.location.search);
             let count = 0;
@@ -150,7 +146,6 @@
             return count;
         }
 
-        // Update badge display
         function updateFilterBadge() {
             const count = countActiveFilters();
 
@@ -164,62 +159,52 @@
             }
         }
 
-        // Open panel
         function openPanel() {
             panel.classList.add('active');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        // Close panel
         function closePanel() {
             panel.classList.remove('active');
             overlay.classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        // Event listeners
         toggleBtn.addEventListener('click', openPanel);
         closeBtn.addEventListener('click', closePanel);
         overlay.addEventListener('click', closePanel);
 
-        // ESC key to close
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && panel.classList.contains('active')) {
                 closePanel();
             }
         });
 
-        // Form submission cleanup
         form.addEventListener('submit', (e) => {
             const inputs = form.querySelectorAll('input, select');
 
             inputs.forEach(input => {
-                // Keep hidden fields
                 if (input.type === 'hidden') return;
 
                 const isOperator = input.name.endsWith('__op');
                 const baseName = input.name.replace(/__op|__value|__from|__to$/, '');
                 const valueInput = form.querySelector(`[name="${baseName}__value"]`);
 
-                // Disable operator if value is empty
                 if (isOperator && valueInput && !valueInput.value) {
                     input.disabled = true;
                 }
 
-                // Disable value input if empty
                 if (input.name.endsWith('__value') && !input.value) {
                     input.disabled = true;
                 }
 
-                // Disable date fields if empty
                 if ((input.name.endsWith('__from') || input.name.endsWith('__to')) && !input.value) {
                     input.disabled = true;
                 }
             });
         });
 
-        // Initialize badge on page load
         updateFilterBadge();
     });
 </script>

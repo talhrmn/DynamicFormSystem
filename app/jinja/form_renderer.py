@@ -2,6 +2,7 @@ from datetime import date
 from typing import Dict, Any, Optional, List
 
 from app.common.schemas import FormSchema
+from app.jinja.consts import FORM_ACTION_PATH, FORM_TITLE
 from app.jinja.form_context import FormContext
 from app.jinja.form_field import FormField
 
@@ -16,8 +17,8 @@ class FormRenderer:
             form_schema: FormSchema,
             values: Optional[Dict[str, Any]] = None,
             errors: Optional[Dict[str, str]] = None,
-            form_title: str = "Submit Form",
-            form_action: str = "/api/v1/forms/submit",
+            form_title: str = FORM_TITLE,
+            form_action: str = FORM_ACTION_PATH,
             success_message: Optional[str] = None,
     ) -> FormContext:
         """

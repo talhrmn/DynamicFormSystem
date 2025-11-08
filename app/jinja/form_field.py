@@ -31,12 +31,9 @@ class FormField:
         self.options = getattr(field_schema, "options", None)
         self.pattern = getattr(field_schema, "pattern", None)
 
-        # HTML attributes & classes
         self.html_type = self._get_html_input_type()
         self.css_classes = self._generate_css_classes()
         self.html_attrs = self._generate_html_attributes()
-
-    # ---- helpers ----
 
     @staticmethod
     def _generate_label(field_name: str) -> str:

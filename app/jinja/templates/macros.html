@@ -1,0 +1,7 @@
+{% macro qs(params, updates={}) %}
+{%- set new_params = params.copy() -%}  {# params is a dict #}
+{%- for k, v in updates.items() -%}
+    {%- set _ = new_params.update({k: v}) -%}
+{%- endfor -%}
+{{ new_params|urlencode }}
+{% endmacro %}

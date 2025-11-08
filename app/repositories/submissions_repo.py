@@ -22,7 +22,7 @@ class SubmissionsRepo(BaseRepo):
             await self.session.flush()
         return db_data
 
-    async def fetch_all(
+    async def fetch_submissions(
             self,
             offset: int = 0,
             limit: Optional[int] = 10,
@@ -58,5 +58,18 @@ class SubmissionsRepo(BaseRepo):
         """Count total number of rows."""
         async with self.transaction():
             query = select(func.count()).select_from(self.table_model)
+            result = await self.session.execute(query)
+            return int(result.scalar() or 0)
+
+    async def count_filtered_total(self, filters: Optional[List[ClauseElement]] = None) -> int:
+        """
+        Count rows matching the given filters.
+        """
+        async with self.transaction():
+            query = select(func.count()).select_from(self.table_model)
+            if filters:
+                for expr in filters:
+                    query = query.where(expr)
+
             result = await self.session.execute(query)
             return int(result.scalar() or 0)

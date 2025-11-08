@@ -7,10 +7,12 @@ from sqlalchemy import String, Integer, Float, Boolean, Date, DateTime, Text, UU
 from sqlalchemy.sql import ColumnElement
 
 from app.common.enums import SupportedColumnTypes
+from app.common.logger import get_logger
 from app.repositories.utils.operators import OperatorHandler
 
 filter_operators = OperatorHandler.get_filter_operators()
 
+logger = get_logger()
 
 @dataclass
 class FilterCondition:
@@ -20,7 +22,7 @@ class FilterCondition:
     value: Any
 
 
-def _infer_logical_type_from_column(col) -> str:
+def col_to_type_mapping(col) -> str:
     """Infer logical filter type from a SQLAlchemy column object."""
     sa_type = col.type
     if isinstance(sa_type, UUID):
@@ -101,13 +103,11 @@ def parse_filters_from_query_params(
     for field, data in field_map.items():
         col_obj = table.__table__.columns.get(field)
         if col_obj is None:
-            # unknown column skip
             continue
 
-        logical_type = _infer_logical_type_from_column(col_obj)
+        logical_type = col_to_type_mapping(col_obj)
         supported_ops = filter_operators.get(logical_type, {})
 
-        # single operator + value (op defaults to 'eq')
         op = data.get("op", "eq")
         raw_value = data.get("value")
         if raw_value and op in supported_ops:
@@ -118,12 +118,12 @@ def parse_filters_from_query_params(
                 ui_conditions.setdefault(field, []).append(
                     FilterCondition(field, op, raw_value, parsed_value)
                 )
-            except Exception:
-                # ignore bad parsing or operator application
+            except Exception as err:
+                logger.warning(err)
                 continue
 
-        # date-specific range handling using 'from' and 'to' keys
-        if logical_type == "date":
+        if logical_type == SupportedColumnTypes.DATE.value:
+            # Handling using 'from' and 'to' keys
             for date_key in ("from", "to"):
                 raw_date = data.get(date_key)
                 if not raw_date:
@@ -150,7 +150,7 @@ def get_column_filter_options(columns):
     """
     options = {}
     for col in columns:
-        logical_type = _infer_logical_type_from_column(col)
+        logical_type = col_to_type_mapping(col)
         ops = list(filter_operators.get(logical_type, {}).keys())
         options[col.name] = ops
     return options
