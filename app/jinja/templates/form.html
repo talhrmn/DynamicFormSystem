@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ context.form_title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ context.form_title }}</h2>
+            </div>
+
+            <div class="card-body">
+                {% if context.show_required_indicator and context.required_fields %}
+                <div class="required-fields-note">
+                    <strong>Note:</strong> Fields marked with <span class="required-indicator">*</span> are required.
+                </div>
+                {% endif %}
+
+                {% if context.has_errors %}
+                <div class="alert alert-danger">
+                    <strong>Validation Error!</strong> Please correct the errors below and try again.
+                </div>
+                {% endif %}
+
+                <form method="{{ context.form_method }}" action="{{ context.form_action }}" novalidate>
+                    {% for field in context.fields|sort(attribute='order') %}
+                    {% include 'components/_field.html' %}
+                    {% endfor %}
+
+                    <div class="btn-group mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            {{ context.submit_text }}
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='/js/form.js') }}"></script>
+{% endblock %}

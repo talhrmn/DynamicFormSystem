@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Success - {{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="success-card">
+                    <div class="success-icon">✓</div>
+                    <h2 style="margin-bottom: var(--space-sm);">{{ title }}</h2>
+                    <p style="font-size: 1.125rem; color: var(--color-text-muted); margin: 0;">
+                        Your form has been submitted successfully!
+                    </p>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>Submission ID:</strong>
+                    <code style="font-family: var(--font-mono); font-size: 0.875rem;">
+                        {{ submission_id }}
+                    </code>
+                </div>
+
+                <h4 style="margin-bottom: var(--space-lg); font-weight: 600;">Submitted Information</h4>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for key, value in submitted_data.items() %}
+                        <tr>
+                            <td><strong>{{ key | replace('_', ' ') | title }}</strong></td>
+                            <td>
+                                {% if value is none %}
+                                <span class="text-muted">—</span>
+                                {% elif value is boolean %}
+                                {% if value %}
+                                <span class="badge badge-success">Yes</span>
+                                {% else %}
+                                <span class="badge badge-secondary">No</span>
+                                {% endif %}
+                                {% else %}
+                                {{ value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="btn-group mt-4">
+                    <a href="{{ url_for('show_form') }}" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Submit Another
+                    </a>
+                    placement
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
