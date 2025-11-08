@@ -37,6 +37,13 @@ class SchemaMissingException(AppBaseException):
     """
     default_message = "The provided path to the schema is incorrect or missing."
 
+
+class TableModelException(AppBaseException):
+    """
+    Raised when a table model is missing.
+    """
+    default_message = "Table model or missing."
+
 """
 App related exceptions
 """
@@ -46,3 +53,13 @@ class ModelGenerationException(AppBaseException):
     Raised when dynamic model generation fails.
     """
     default_message = "Failed to generate dynamic model."
+
+class InvalidFilterException(AppBaseException):
+    """
+    Raised when attempting to filter by a column that doesn't exist.
+    """
+    default_message = "Invalid filter request."
+
+class InvalidSortColumnException(Exception):
+    """Raised when attempting to sort by a column that doesn't exist."""
+    default_message = "Invalid sort request."

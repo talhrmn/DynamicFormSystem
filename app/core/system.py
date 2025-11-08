@@ -7,7 +7,8 @@ from typing import Optional, Type, Dict, Any
 
 from pydantic import BaseModel
 
-from app.common.exceptions import InvalidSchemaException, SchemaNotLoadedException, SchemaMissingException
+from app.common.exceptions import InvalidSchemaException, SchemaNotLoadedException, SchemaMissingException, \
+    TableModelException
 from app.common.logger import get_logger
 from app.common.schemas import FormSchema
 from app.schemas.dynamic.model_factory import generate_dynamic_pydantic_model
@@ -24,6 +25,7 @@ class SystemManager:
     def __init__(self):
         self.form_schema: Optional[FormSchema] = None
         self.validation_model: Optional[Type[BaseModel]] = None
+        self.table_model: Optional[type] = None
         self._schema_dict: Optional[Dict[str, Any]] = None
         self.schema_loaded: bool = False
 
@@ -99,6 +101,16 @@ class SystemManager:
         if not self.schema_loaded or not self._schema_dict:
             raise SchemaNotLoadedException()
         return self._schema_dict
+
+    def set_table_model(self, table_model: type) -> None:
+        """Return the generated Pydantic validation model."""
+        self.table_model = table_model
+
+    def get_table_model(self) -> type:
+        """Return the original schema dictionary."""
+        if not self.table_model:
+            raise TableModelException()
+        return self.table_model
 
 
 @lru_cache()
