@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Form Analytics</h2>
+                <p>Basic metrics and duplicate detection for this form</p>
+            </div>
+            <div class="card-body">
+
+                <div class="alert alert-info">
+                    <strong>{{ total_submissions }}</strong> total submissions
+                </div>
+
+                <h4>Field Statistics</h4>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Non-null Count</th>
+                            <th>Unique Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for f in field_stats %}
+                        <tr>
+                            <td>{{ f.name }}</td>
+                            <td>{{ f.type }}</td>
+                            <td>{{ f.non_null_count }}</td>
+                            <td>{{ f.unique_count }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="mt-4">Duplicate Submissions</h4>
+                {% if duplicates %}
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            {% for key in duplicates[0].fields.keys() %}
+                            <th>{{ key | title }}</th>
+                            {% endfor %}
+                            <th>Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for d in duplicates %}
+                        <tr>
+                            {% for value in d.fields.values() %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                            <td>{{ d.count }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-success">No duplicates detected.</div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

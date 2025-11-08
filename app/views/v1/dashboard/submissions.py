@@ -36,8 +36,7 @@ async def list_submissions(
         "submissions.html",
         {
             "request": request,
-            **result,
+            **result.model_dump(),
             "query_params": dict(request.query_params)
         }
     )
-

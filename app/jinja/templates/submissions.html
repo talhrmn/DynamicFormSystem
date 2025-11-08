@@ -32,14 +32,14 @@
                                 {% set next_desc = "false" if (is_sorted and sort_desc) else "true" %}
                                 {% set color_class = "" %}
                                 {% if is_sorted %}
-                                    {% set color_class = "text-success" if not sort_desc else "text-danger" %}
+                                {% set color_class = "text-success" if not sort_desc else "text-danger" %}
                                 {% endif %}
 
                                 <a href="?{{ macros.qs(query_params, updates={'sort_by': key, 'sort_desc': next_desc, 'page': 1}) }}"
                                    class="{{ color_class }}">
                                     {{ key.replace('_', ' ') | title }}
                                     {% if is_sorted %}
-                                        <span>{{ '↑' if not sort_desc else '↓' }}</span>
+                                    <span>{{ '↑' if not sort_desc else '↓' }}</span>
                                     {% endif %}
                                 </a>
                             </th>
@@ -53,17 +53,17 @@
                             {% for key, value in submission.items() %}
                             <td>
                                 {% if value is none %}
-                                    <span class="text-muted">—</span>
+                                <span class="text-muted">—</span>
                                 {% elif value is boolean %}
-                                    {% if value %}
-                                        <span class="badge badge-success">Yes</span>
-                                    {% else %}
-                                        <span class="badge badge-secondary">No</span>
-                                    {% endif %}
-                                {% elif value is string and value|length > 60 %}
-                                    {{ value[:60] }}...
+                                {% if value %}
+                                <span class="badge badge-success">Yes</span>
                                 {% else %}
-                                    {{ value }}
+                                <span class="badge badge-secondary">No</span>
+                                {% endif %}
+                                {% elif value is string and value|length > 60 %}
+                                {{ value[:60] }}...
+                                {% else %}
+                                {{ value }}
                                 {% endif %}
                             </td>
                             {% endfor %}
