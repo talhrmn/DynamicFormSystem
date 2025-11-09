@@ -86,6 +86,13 @@ dynamic-form-system/
 
 Forms are defined using JSON schema. Example schema (`app/form_schemas/schema.json`):
 
+Supported field types:
+TEXT, STRING, EMAIL, PASSWORD, DATE, NUMBER, DROPDOWN
+(Password is currently being handled as string for display and testing purposes, but can be changed -
+hashed/encrypted/etc in the future).
+
+The Project is designed to be extensible and to support more field types in the future.
+
 ```json
 {
   "name": {

@@ -23,7 +23,6 @@ class FormField:
         self.value = value
         self.error = error
 
-        # Schema-driven attributes
         self.min_length = getattr(field_schema, "min_length", None)
         self.max_length = getattr(field_schema, "max_length", None)
         self.min_value = getattr(field_schema, "min", None)
@@ -64,7 +63,6 @@ class FormField:
         if self.required:
             attrs["required"] = True
 
-        # String-like constraints
         if self.type in (SupportedFieldTypes.STRING, SupportedFieldTypes.TEXT):
             if self.min_length:
                 attrs["minlength"] = self.min_length
@@ -73,7 +71,6 @@ class FormField:
             if self.pattern:
                 attrs["pattern"] = self.pattern
 
-        # Number constraints
         if self.type == SupportedFieldTypes.NUMBER:
             if self.min_value is not None:
                 attrs["min"] = self.min_value
@@ -81,14 +78,11 @@ class FormField:
                 attrs["max"] = self.max_value
             attrs["step"] = "any"
 
-        # Password constraints (same as string but explicit)
         if self.type == SupportedFieldTypes.PASSWORD:
             if self.min_length:
                 attrs["minlength"] = self.min_length
             if self.max_length:
                 attrs["maxlength"] = self.max_length
-
-        # Dropdown doesn't need input attrs beyond options — template will render <select>
 
         return attrs
 
