@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import HTMLResponse
+from starlette import status
 from starlette.requests import Request
 
 from app.dependencies import get_submissions_service
@@ -24,5 +25,6 @@ async def analytics_page(
         {
             "request": request,
             **analytics.model_dump()
-        }
+        },
+        status_code=status.HTTP_200_OK
     )

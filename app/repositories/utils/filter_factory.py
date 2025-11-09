@@ -2,7 +2,7 @@ from typing import Any, Type
 
 from sqlalchemy.sql import ColumnElement
 
-from app.common.exceptions import InvalidFilterException
+from app.common.exceptions.exceptions import InvalidFilterException
 from app.repositories.utils.operators import OperatorHandler
 
 
@@ -18,12 +18,11 @@ class FilterExpressionFactory:
             value: Any
     ) -> ColumnElement:
         """Generate a SQLAlchemy expression for a single filter."""
-        # Validate column exists
+
         field = getattr(model, field_name, None)
         if field is None:
             raise InvalidFilterException(f"Column '{field_name}' does not exist on model {model.__name__}")
 
-        # Get operator function
         operators = OperatorHandler.get_filter_operators().get(filter_type)
         if not operators:
             raise InvalidFilterException(f"Unsupported filter type: {filter_type}")

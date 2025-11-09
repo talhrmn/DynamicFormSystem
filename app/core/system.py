@@ -7,7 +7,7 @@ from typing import Optional, Type, Dict, Any
 
 from pydantic import BaseModel
 
-from app.common.exceptions import InvalidSchemaException, SchemaNotLoadedException, SchemaMissingException, \
+from app.common.exceptions.exceptions import InvalidSchemaException, SchemaNotLoadedException, SchemaMissingException, \
     TableModelException
 from app.common.logger import get_logger
 from app.common.schemas import FormSchema
