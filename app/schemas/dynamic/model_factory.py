@@ -10,7 +10,7 @@ from typing import Type, Any, Tuple, Dict, Literal
 from pydantic import BaseModel, Field, EmailStr, create_model, ConfigDict
 
 from app.common.enums import SupportedFieldTypes
-from app.common.exceptions import InvalidSchemaException
+from app.common.exceptions.exceptions import InvalidSchemaException
 from app.common.schemas import FieldSchema, FormSchema
 
 _dynamic_model_cache: Dict[str, Type[BaseModel]] = {}

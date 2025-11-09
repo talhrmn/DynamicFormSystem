@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from starlette import status
 
 from app.dependencies import get_submissions_service
 from app.schemas.data.submissions import SubmissionsDataResponse, DuplicatesResponse, StatsResponse
@@ -10,6 +11,7 @@ router = APIRouter()
 @router.get(
     "/",
     response_model=SubmissionsDataResponse,
+    status_code=status.HTTP_200_OK,
     summary="List all form submissions",
     description="Retrieve all form submissions from the database"
 )
@@ -32,6 +34,7 @@ async def list_submissions(
 @router.get(
     "/stats",
     response_model=StatsResponse,
+    status_code=status.HTTP_200_OK,
     summary="Get basic submission stats",
     description="Retrieve basic statistics of submissions from the database"
 )
@@ -52,6 +55,7 @@ async def get_stats(
 @router.get(
     "/duplicates",
     response_model=DuplicatesResponse,
+    status_code=status.HTTP_200_OK,
     summary="Get duplicate submissions",
     description="Retrieve all duplicate submissions from the database"
 )

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
+from starlette import status
 
 from app.common.logger import get_logger
 from app.core.system import SystemManager, get_system_manager
@@ -18,7 +19,10 @@ async def preview_form(
 ):
     form_schema = system_manager.get_form_schema()
     fields_info = await FormService.get_schema_preview(form_schema)
-    return templates.TemplateResponse("preview.html", {
-        "request": request,
-        **fields_info
-    })
+    return templates.TemplateResponse(
+        "preview.html", {
+            "request": request,
+            **fields_info
+        },
+        status_code=status.HTTP_200_OK
+    )

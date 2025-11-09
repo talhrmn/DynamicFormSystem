@@ -3,7 +3,7 @@ from typing import Any, List, Optional
 from sqlalchemy import select, func, ClauseElement
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.common.exceptions import InvalidSortColumnException
+from app.common.exceptions.exceptions import InvalidSortColumnException
 from app.repositories.base_repo import BaseRepo
 
 

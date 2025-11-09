@@ -36,10 +36,13 @@ async def show_form(
         form_action=request.url_for("submit_form"),
     )
 
-    return templates.TemplateResponse("form.html", {
-        "request": request,
-        "context": context,
-    })
+    return templates.TemplateResponse(
+        "form.html", {
+            "request": request,
+            "context": context,
+        },
+        status_code=status.HTTP_200_OK
+    )
 
 
 @router.post(
@@ -64,7 +67,8 @@ async def submit_form(
 
         return templates.TemplateResponse(
             "success.html",
-            {"request": request, **success_context}
+            {"request": request, **success_context},
+            status_code=status.HTTP_201_CREATED
         )
 
     except ValidationError as err:

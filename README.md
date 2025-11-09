@@ -58,7 +58,6 @@ and data collection based on JSON schemas.
 
 2. **Access the application**
     - API Documentation: http://localhost:8000/docs
-    - ReDoc Documentation: http://localhost:8000/redoc
     - Web Interface: http://localhost:8000/api/v1/jinja/form/
 
 ## Project Structure

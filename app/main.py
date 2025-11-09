@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
+from app.common.exceptions.exceptions_handler import register_exception_handlers
 from app.common.logger import setup_logging, get_logger
 from app.core.config import get_settings
 from app.core.system import get_system_manager
@@ -59,9 +60,7 @@ async def lifespan(app: FastAPI):
         logger.info("shutdown")
 
 
-"""
-APPLICATION
-"""
+# APPLICATION
 app = FastAPI(
     title=settings.APP_NAME,
     description="Dynamic for system",
@@ -90,19 +89,25 @@ app.add_middleware(
     allow_headers=settings.CORS_HEADERS,
 )
 
+# Register exception handlers
+register_exception_handlers(app)
+
 # API routers
 app.include_router(
     api_router,
     responses={
-        503: {"description": "Service unavailable"},
-        500: {"description": "Internal server error"},
+        status.HTTP_400_BAD_REQUEST: {"description": "Bad Request"},
+        status.HTTP_401_UNAUTHORIZED: {"description": "Unauthorized"},
+        status.HTTP_403_FORBIDDEN: {"description": "Forbidden"},
+        status.HTTP_404_NOT_FOUND: {"description": "Not Found"},
+        status.HTTP_422_UNPROCESSABLE_ENTITY: {"description": "Validation Error"},
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal Server Error"},
+        status.HTTP_503_SERVICE_UNAVAILABLE: {"description": "Service Unavailable"},
     },
 )
 
 
-# -----------------------------------------------------------------------------
 # ROOT ENDPOINT
-# -----------------------------------------------------------------------------
 @app.get("/", tags=["Root"], summary="API Root")
 async def root():
     return {

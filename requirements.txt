@@ -5,6 +5,7 @@ python-dotenv
 pydantic
 pydantic-settings
 python-multipart
+starlette
 
 # Database
 SQLAlchemy[asyncio]

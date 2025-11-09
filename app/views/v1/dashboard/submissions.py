@@ -1,5 +1,6 @@
 from fastapi import Depends, Request, Query, APIRouter
 from fastapi.responses import HTMLResponse
+from starlette import status
 
 from app.dependencies import get_submissions_service
 from app.jinja.templates import templates
@@ -38,5 +39,6 @@ async def list_submissions(
             "request": request,
             **result.model_dump(),
             "query_params": dict(request.query_params)
-        }
+        },
+        status_code=status.HTTP_200_OK
     )
