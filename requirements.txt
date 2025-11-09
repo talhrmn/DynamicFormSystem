@@ -1,28 +1,42 @@
-annotated-doc
-annotated-types
-anyio
-asyncpg
-click
-dnspython
-dotenv
-email-validator
-Faker
+# Core Dependencies
 fastapi
-greenlet
-h11
-idna
-Jinja2
-MarkupSafe
+uvicorn[standard]
+python-dotenv
 pydantic
 pydantic-settings
-pydantic_core
-python-dotenv
 python-multipart
-sniffio
-SQLAlchemy
-starlette
+
+# Database
+SQLAlchemy[asyncio]
+alembic
+asyncpg
+greenlet
+
+# Templates & Frontend
+Jinja2
+MarkupSafe
+
+# Authentication & Security
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# Development & Testing
+pytest
+pytest-asyncio
+httpx
+Faker
+
+# Utilities
 structlog
-typing-inspection
-typing_extensions
-tzdata
-uvicorn
+python-dateutil
+email-validator
+
+# Testing
+pytest
+anyio
+pytest-asyncio
+pytest-tornasync
+pytest-trio
+pytest-twisted
+aiosqlite
