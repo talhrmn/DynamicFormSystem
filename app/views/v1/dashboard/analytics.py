@@ -7,7 +7,7 @@ from app.dependencies import get_submissions_service
 from app.jinja.templates import templates
 from app.services.submissions_service import SubmissionsService
 
-router = APIRouter(prefix="/analytics", tags=["Analytics"])
+router = APIRouter(prefix="/analytics")
 
 
 @router.get(

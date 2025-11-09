@@ -114,7 +114,10 @@ async def root():
         "service": settings.APP_NAME,
         "version": settings.APP_VERSION,
         "status": "running",
-        "docs": {"swagger": "/docs", "redoc": "/redoc", "openapi": "/openapi.json"}
+        "docs": {
+            "swagger": "/docs",
+            "jinja form": f"{settings.API_PREFIX}{settings.APP_VERSION}/jinja/form"
+        }
     }
 
 
